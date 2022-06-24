@@ -43,7 +43,7 @@
 #  define GNUC_COMPATIBLE
 #endif
 
-#if defined(__ppc64__) ||  defined (__PPC64__) || defined(__ppc64le__) || defined (__PPC64LE__)
+#if defined(__ppc64__) ||  defined (__PPC64__) || defined(__ppc64le__) || defined (__PPC64LE__) || defined(__riscv)
 #  define HAS_64BIT_ATOMICS
 #  define HAS_64BIT_LOCKFREE
 #  define GNUC_COMPATIBLE

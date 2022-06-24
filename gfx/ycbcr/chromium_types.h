@@ -43,6 +43,12 @@
 #define ARCH_CPU_AARCH64_FAMILY 1
 #define ARCH_CPU_AARCH64 1
 #define ARCH_CPU_64_BITS 1
+#elif defined(__riscv) && defined(__riscv_xlen) && __riscv_xlen == 64
+#define ARCH_CPU_RISCV 1
+#define ARCH_CPU_64_BITS 1
+#elif defined(__riscv) && defined(__riscv_xlen) && __riscv_xlen == 32
+#define ARCH_CPU_RISCV 1
+#define ARCH_CPU_32_BITS 1
 #else
 #warning Please add support for your architecture in chromium_types.h
 #endif

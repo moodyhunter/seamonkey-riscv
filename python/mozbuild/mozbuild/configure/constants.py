@@ -56,6 +56,7 @@ CPU_bitness = {
     'sparc64': 64,
     'x86': 32,
     'x86_64': 64,
+    'riscv64': 64,
 }
 
 CPU = EnumString.subclass(*CPU_bitness.keys())
@@ -88,6 +89,7 @@ CPU_preprocessor_checks = OrderedDict((
     ('mips64', '__mips64'),
     ('mips32', '__mips__'),
     ('sh4', '__sh__'),
+    ('riscv64', '__riscv')
 ))
 
 assert sorted(CPU_preprocessor_checks.keys()) == sorted(CPU.POSSIBLE_VALUES)
