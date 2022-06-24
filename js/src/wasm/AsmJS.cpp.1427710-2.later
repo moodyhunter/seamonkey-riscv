@@ -1,0 +1,30 @@
+--- AsmJS.cpp
++++ AsmJS.cpp
+@@ -7173,26 +7173,26 @@ CheckStatement(FunctionValidator& f, Par
+     return f.fail(stmt, "unexpected statement kind");
+ }
+ 
+ static bool
+ ParseFunction(ModuleValidator& m, ParseNode** fnOut, unsigned* line)
+ {
+     auto& tokenStream = m.tokenStream();
+ 
+     tokenStream.consumeKnownToken(TokenKind::Function, TokenStreamShared::Operand);
+ 
+     auto& anyChars = tokenStream.anyCharsAccess();
+     uint32_t toStringStart = anyChars.currentToken().pos.begin;
+     *line = anyChars.srcCoords.lineNum(anyChars.currentToken().pos.end);
+ 
+     TokenKind tk;
+     if (!tokenStream.getToken(&tk, TokenStreamShared::Operand))
+         return false;
+-    if (tk == TokenKind::TOK_MUL)
++    if (tk == TokenKind::Mul)
+         return m.failCurrentOffset("unexpected generator function");
+     if (!TokenKindIsPossibleIdentifier(tk))
+         return false;  // The regular parser will throw a SyntaxError, no need to m.fail.
+ 
+     RootedPropertyName name(m.cx(), m.parser().bindingIdentifier(YieldIsName));
+     if (!name)
+         return false;
+ 

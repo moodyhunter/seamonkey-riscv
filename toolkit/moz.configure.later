@@ -1,0 +1,21 @@
+--- moz.configure
++++ moz.configure
+@@ -2084,17 +2084,17 @@ def default_agent_flag(enabled):
+ set_config('MOZ_DEFAULT_BROWSER_AGENT', default_agent_flag)
+ 
+ # NSS
+ # ===
+ option('--with-system-nss', help='Use system NSS')
+ 
+ imply_option('--with-system-nspr', True, when='--with-system-nss')
+ 
+-nss_pkg = pkg_check_modules('NSS', 'nss >= 3.53', when='--with-system-nss', config=False)
++nss_pkg = pkg_check_modules('NSS', 'nss >= 3.53.1', when='--with-system-nss', config=False)
+ 
+ set_config('MOZ_SYSTEM_NSS', True, when='--with-system-nss')
+ 
+ @depends(nss_pkg, check_build_environment)
+ def nss_config(nss_pkg, build_env):
+     cflags = ['-I%s' % os.path.join(build_env.dist, 'include', 'nss')]
+     libs = None
+     if nss_pkg:

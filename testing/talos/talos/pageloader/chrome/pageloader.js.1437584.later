@@ -1,0 +1,42 @@
+--- pageloader.js
++++ pageloader.js
+
+@@ -881,35 +873,35 @@ function plLoadURLsFromURI(manifestUri) 
+       } else if (items.length != 1) {
+         dumpLine("tp: Error on line " + lineNo + " in " + manifestUri.spec + ": whitespace must be %-escaped!");
+         return null;
+       }
+ 
+       var url;
+ 
+       if (!baseVsRef) {
+-        url = gIOS.newURI(urlspec, null, manifestUri);
++        url = Services.io.newURI(urlspec, null, manifestUri);
+ 
+         if (pageFilterRegexp && !pageFilterRegexp.test(url.spec))
+           continue;
+ 
+         url_array.push({ url, flags });
+       } else {
+         // base vs ref type of talos test
+         // we add a 'pre' prefix here indicating that this particular page is a base page or a reference
+         // page; later on this 'pre' is used when recording the actual time value/result; because in
+         // the results we use the url as the results key; but we might use the same test page as a reference
+         // page in the same test suite, so we need to add a prefix so this results key is always unique
+-        url = gIOS.newURI(urlspecBase, null, manifestUri);
++        url = Services.io.newURI(urlspecBase, null, manifestUri);
+         if (pageFilterRegexp && !pageFilterRegexp.test(url.spec))
+           continue;
+         var pre = "base_page_" + baseVsRefIndex + "_";
+         url_array.push({ url, flags, pre });
+ 
+-        url = gIOS.newURI(urlspecRef, null, manifestUri);
++        url = Services.io.newURI(urlspecRef, null, manifestUri);
+         if (pageFilterRegexp && !pageFilterRegexp.test(url.spec))
+           continue;
+         pre = "ref_page_" + baseVsRefIndex + "_";
+         url_array.push({ url, flags, pre });
+       }
+     }
+   } while (more);
+ 

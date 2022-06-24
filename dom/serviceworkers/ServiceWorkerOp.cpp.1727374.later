@@ -1,0 +1,21 @@
+--- ServiceWorkerOp.cpp
++++ ServiceWorkerOp.cpp
+@@ -648,17 +648,17 @@ class PushEventOp final : public Extenda
+ 
+       RejectAll(result.StealNSResult());
+       ReportError(aWorkerPrivate);
+     });
+ 
+     const ServiceWorkerPushEventOpArgs& args =
+         mArgs.get_ServiceWorkerPushEventOpArgs();
+ 
+-    PushEventInit pushEventInit;
++    RootedDictionary<PushEventInit> pushEventInit(aCx);
+ 
+     if (args.data().type() != OptionalPushData::Tvoid_t) {
+       auto& bytes = args.data().get_ArrayOfuint8_t();
+       JSObject* data =
+           Uint8Array::Create(aCx, bytes.Length(), bytes.Elements());
+ 
+       if (!data) {
+         result = ErrorResult(NS_ERROR_FAILURE);

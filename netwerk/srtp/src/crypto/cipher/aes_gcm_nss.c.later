@@ -1,0 +1,20 @@
+--- aes_gcm_nss.c
++++ aes_gcm_nss.c
+@@ -266,16 +266,17 @@ static srtp_err_status_t srtp_aes_gcm_ns
+                                                     int encrypt,
+                                                     unsigned char *buf,
+                                                     unsigned int *enc_len)
+ {
+     srtp_aes_gcm_ctx_t *c = (srtp_aes_gcm_ctx_t *)cv;
+ 
+     c->params.pIv = c->iv;
+     c->params.ulIvLen = GCM_IV_LEN;
++    c->params.ulIvBits = GCM_IV_LEN * 8;
+     c->params.pAAD = c->aad;
+     c->params.ulAADLen = c->aad_size;
+ 
+     // Reset AAD
+     c->aad_size = 0;
+ 
+     int rv;
+     SECItem param = { siBuffer, (unsigned char *)&c->params,

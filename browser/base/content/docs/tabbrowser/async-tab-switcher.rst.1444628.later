@@ -1,0 +1,33 @@
+--- async-tab-switcher.rst
++++ async-tab-switcher.rst
+@@ -28,17 +28,17 @@ renderLayers, hasLayers, docShellIsActiv
+   For non-remote ``<xul:browser>``'s, ``renderLayers`` is an alias for ``docShellIsActive``.
+ 
+ ``hasLayers``
+   For remote ``<xul:browser>``'s, this read-only property returns ``true`` if the compositor has layers for this tab, and ``false`` otherwise.
+ 
+   For non-remote ``<xul:browser>``'s, ``hasLayers`` returns the value for ``docShellIsActive``.
+ 
+ ``docShellIsActive``
+-  For remote ``<xul:browser>``'s, setting ``docShellIsActive`` to ``true`` also sets ``renderLayers`` to true, and then sends a message to the content process to set its top-level docShell active state to ``true``. Similarly, setting ``docShellIsActive`` to ``false`` also sets ``renderLayers`` to false, and then sends a message ot the content process to set its top-level docShell active state to ``false``.
++  For remote ``<xul:browser>``'s, setting ``docShellIsActive`` to ``true`` also sets ``renderLayers`` to true, and then sends a message to the content process to set its top-level docShell active state to ``true``. Similarly, setting ``docShellIsActive`` to ``false`` also sets ``renderLayers`` to false, and then sends a message to the content process to set its top-level docShell active state to ``false``.
+ 
+   For non-remote ``<xul:browser>``'s, ``docShellIsActive`` forwards to the ``isActive`` property on the ``<xul:browser>``'s top-level docShell.
+ 
+   Setting a docShell to be active causes the tab's visibilitychange event to fire to indicate that the tab has become visible. Media that was waiting to be played until the tab is selected will also begin to play.
+ 
+   An active docShell is also required in order to generate a print preview of the loaded document.
+ 
+ 
+@@ -225,9 +225,9 @@ Warming is controlled by the following p
+ 
+ .. _async-tab-switcher.logging:
+ 
+ Logging
+ =======
+ 
+ The async tab switcher has some logging capabilities that make it easier to debug and reason about its behaviour. Setting the hidden ``browser.tabs.remote.logSwitchTiming`` pref to true will put logging into the Browser Console.
+ 
+-Alternatively, setting the ``useDumpForLogging`` property to true within the source code of the tab switcher will dump those logs to stdout.
+\ No newline at end of file
++Alternatively, setting the ``useDumpForLogging`` property to true within the source code of the tab switcher will dump those logs to stdout.

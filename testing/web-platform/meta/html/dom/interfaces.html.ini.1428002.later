@@ -1,0 +1,22 @@
+--- interfaces.html.ini
++++ interfaces.html.ini
+@@ -3799,19 +3794,16 @@
+     expected: FAIL
+ 
+   [HTMLTextAreaElement interface: document.createElement("textarea") must inherit property "dirName" with the proper type]
+     expected: FAIL
+ 
+   [HTMLTextAreaElement interface: document.createElement("textarea") must inherit property "inputMode" with the proper type]
+     expected: FAIL
+ 
+-  [HTMLScriptElement interface: document.createElement("script") must inherit property "noModule" with the proper type]
+-    expected: FAIL
+-
+   [HTMLScriptElement interface: document.createElement("script") must inherit property "nonce" with the proper type]
+     expected: FAIL
+ 
+   [HTMLCanvasElement interface: operation transferControlToOffscreen()]
+     expected: FAIL
+ 
+   [HTMLCanvasElement interface: document.createElement("canvas") must inherit property "transferControlToOffscreen()" with the proper type]
+     expected: FAIL

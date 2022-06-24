@@ -1,0 +1,40 @@
+--- MANIFEST.json
++++ MANIFEST.json
+@@ -585955,17 +586012,17 @@
+    "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "support"
+   ],
+   "webdriver/tests/element_click/select.py": [
+    "5ba51b660c7203bba3ada597c2f56fe094358e1f",
+    "wdspec"
+   ],
+   "webdriver/tests/element_retrieval/get_active_element.py": [
+-   "9080770b60a988cb37e30700efb118d392a896c7",
++   "41dab8ecf11556f7b1490d515557de659813881e",
+    "wdspec"
+   ],
+   "webdriver/tests/fullscreen_window.py": [
+    "6b1e481aac6856b6e858df17731d037997b99f83",
+    "wdspec"
+   ],
+   "webdriver/tests/get_window_rect.py": [
+    "0dc9c8cc1332907be819d52feb7c94f4b1cc928a",
+@@ -586083,17 +586140,17 @@
+    "5d3ae3da2967072dff274f384cceaecc07b6aa4b",
+    "wdspec"
+   ],
+   "webdriver/tests/support/__init__.py": [
+    "5a31a3917a5157516c10951a3b3d5ffb43b992d9",
+    "support"
+   ],
+   "webdriver/tests/support/asserts.py": [
+-   "b02f45e99cdee49f12608e60333e566c8c0e04d0",
++   "4e4f29b9d305383e5bcfa01fa1ba789d0c12ef93",
+    "support"
+   ],
+   "webdriver/tests/support/fixtures.py": [
+    "4b68fd0f02cc88e9abb422c2c3978812edbbbec7",
+    "support"
+   ],
+   "webdriver/tests/support/http_request.py": [
+    "cb40c781fea2280b98135522def5e6a116d7b946",

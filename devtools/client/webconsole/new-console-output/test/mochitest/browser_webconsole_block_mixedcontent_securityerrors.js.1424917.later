@@ -1,0 +1,17 @@
+--- browser_webconsole_block_mixedcontent_securityerrors.js
++++ browser_webconsole_block_mixedcontent_securityerrors.js
+@@ -77,14 +77,12 @@ add_task(async function() {
+   url = await simulateLinkClick(learnMoreLink);
+   is(url, LEARN_MORE_URI, `Clicking the provided link opens ${url}`);
+ });
+ 
+ function pushPrefEnv() {
+   const prefs = [
+     ["security.mixed_content.block_active_content", true],
+     ["security.mixed_content.block_display_content", true],
+-    ["security.mixed_content.use_hsts", false],
+-    ["security.mixed_content.send_hsts_priming", false],
+   ];
+ 
+   return Promise.all(prefs.map(([pref, value]) => pushPref(pref, value)));
+ }

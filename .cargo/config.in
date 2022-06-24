@@ -1,0 +1,18 @@
+[source.crates-io]
+registry = 'https://github.com/rust-lang/crates.io-index'
+replace-with = 'vendored-sources'
+
+[source."https://github.com/gankro/serde"]
+git = "https://github.com/gankro/serde"
+branch = "deserialize_from_enums4"
+replace-with = "vendored-sources"
+
+[source."https://github.com/hsivonen/packed_simd"]
+git = "https://github.com/hsivonen/packed_simd"
+replace-with = "vendored-sources"
+rev = "8b4bd7d8229660a749dbe419a57ea01df9de5453"
+
+[source.vendored-sources]
+directory = '@top_srcdir@/third_party/rust'
+
+@WIN64_CARGO_LINKER_CONFIG@

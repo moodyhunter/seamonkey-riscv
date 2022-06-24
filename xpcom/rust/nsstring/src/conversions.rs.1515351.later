@@ -1,0 +1,73 @@
+--- conversions.rs
++++ conversions.rs
+@@ -14,18 +14,18 @@ use super::Gecko_FallibleAssignCString;
+ use super::Latin1StringLike;
+ 
+ use conversions::encoding_rs::mem::*;
+ use conversions::encoding_rs::Encoding;
+ 
+ /// Required math stated in the docs of
+ /// `convert_utf16_to_utf8()`.
+ #[inline(always)]
+-fn times_three_plus_one(a: usize) -> Option<usize> {
+-    a.checked_mul(3)?.checked_add(1)
++fn times_three(a: usize) -> Option<usize> {
++    a.checked_mul(3)
+ }
+ 
+ #[inline(always)]
+ fn identity(a: usize) -> Option<usize> {
+     Some(a)
+ }
+ 
+ #[inline(always)]
+@@ -316,17 +316,17 @@ impl nsACString {
+         other: &[u16],
+         old_len: usize,
+     ) -> Result<BulkWriteOk, ()> {
+         // We first size the buffer for ASCII if the first two cache lines are ASCII. If that turns out
+         // not to be enough, we size for the worst case given the length of the remaining input at that
+         // point. BUT if the worst case fits inside the inline capacity of an autostring, we skip
+         // the ASCII stuff.
+         let worst_case_needed = if let Some(inline_capacity) = self.inline_capacity() {
+-            let worst_case = times_three_plus_one(other.len()).ok_or(())?;
++            let worst_case = times_three(other.len()).ok_or(())?;
+             if worst_case <= inline_capacity {
+                 Some(worst_case)
+             } else {
+                 None
+             }
+         } else {
+             None
+         };
+@@ -335,28 +335,28 @@ impl nsACString {
+             let new_len_with_ascii = old_len.checked_add(other.len()).ok_or(())?;
+             let mut handle = unsafe { self.bulk_write(new_len_with_ascii, old_len, false)? };
+             let (read, written) = convert_utf16_to_utf8_partial(other, &mut handle.as_mut_slice()[old_len..]);
+             let left = other.len() - read;
+             if left == 0 {
+                 return Ok(handle.finish(old_len + written, true));
+             }
+             let filled = old_len + written;
+-            let needed = times_three_plus_one(left).ok_or(())?;
++            let needed = times_three(left).ok_or(())?;
+             let new_len = filled.checked_add(needed).ok_or(())?;
+             unsafe {
+                 handle.restart_bulk_write(new_len, filled, false)?;
+             }
+             (filled, read, handle)
+         } else {
+             // Started with non-ASCII. Compute worst case
+             let needed = if let Some(n) = worst_case_needed {
+                 n
+             } else {
+-                times_three_plus_one(other.len()).ok_or(())?
++                times_three(other.len()).ok_or(())?
+             };
+             let new_len = old_len.checked_add(needed).ok_or(())?;
+             let mut handle = unsafe { self.bulk_write(new_len, old_len, false)? };
+             (old_len, 0, handle)
+         };
+         let written =
+             convert_utf16_to_utf8(&other[read..], &mut handle.as_mut_slice()[filled..]);
+         Ok(handle.finish(filled + written, true))

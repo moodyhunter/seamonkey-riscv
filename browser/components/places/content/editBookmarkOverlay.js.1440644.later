@@ -1,0 +1,21 @@
+--- editBookmarkOverlay.js
++++ editBookmarkOverlay.js
+@@ -1067,17 +1067,17 @@ var gEditItemOverlay = {
+     }
+ 
+     if (!this._paneInfo.isItem || this._paneInfo.itemId != aItemId) {
+       return;
+     }
+ 
+     switch (aProperty) {
+     case "uri":
+-      let newURI = Services.ui.newURI(aValue);
++      let newURI = Services.io.newURI(aValue);
+       if (!newURI.equals(this._paneInfo.uri)) {
+         this._paneInfo.uri = newURI;
+         if (this._paneInfo.visibleRows.has("locationRow"))
+           this._initLocationField();
+ 
+         if (this._paneInfo.visibleRows.has("tagsRow")) {
+           delete this._paneInfo._cachedCommonTags;
+           this._onTagsChange(aGuid, newURI).catch(Cu.reportError);

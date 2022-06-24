@@ -1,0 +1,29 @@
+--- bootstrap.js
++++ bootstrap.js
+@@ -43,25 +43,17 @@ function loadMochitest(e) {
+   win.loadURI(url);
+   if (flavor == "mochitest") {
+     return;
+   }
+ 
+   WindowListener.setupWindow(win);
+   Services.wm.addListener(WindowListener);
+ 
+-  let overlay;
+-  if (flavor == "jetpack-addon") {
+-    overlay = "chrome://mochikit/content/jetpack-addon-overlay.xul";
+-  } else if (flavor == "jetpack-package") {
+-    overlay = "chrome://mochikit/content/jetpack-package-overlay.xul";
+-  } else {
+-    overlay = "chrome://mochikit/content/browser-test-overlay.xul";
+-  }
+-
++  let overlay = "chrome://mochikit/content/browser-test-overlay.xul";
+   win.document.loadOverlay(overlay, null);
+ }
+ 
+ function startup(data, reason) {
+   let win = Services.wm.getMostRecentWindow("navigator:browser");
+   // wait for event fired from start_desktop.js containing the
+   // suite and url to load
+   win.addEventListener('mochitest-load', loadMochitest);

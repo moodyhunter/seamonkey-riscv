@@ -1,0 +1,80 @@
+--- nsNativeThemeCocoa.mm
++++ nsNativeThemeCocoa.mm
+@@ -1201,16 +1201,30 @@ void nsNativeThemeCocoa::DrawMenuItem(CG
+     params.rtl = aParams.rtl;
+     params.icon = MenuIcon::eCheckmark;
+     DrawMenuIcon(cgContext, inBoxRect, params);
+   }
+ }
+ 
+ void nsNativeThemeCocoa::DrawMenuSeparator(CGContextRef cgContext, const CGRect& inBoxRect,
+                                            const MenuItemParams& aParams) {
++  // Workaround for visual artifacts issues with
++  // HIThemeDrawMenuSeparator on macOS Big Sur.
++  if (nsCocoaFeatures::OnBigSurOrLater()) {
++    CGRect separatorRect = inBoxRect;
++    separatorRect.size.height = 1;
++    separatorRect.size.width -= 42;
++    separatorRect.origin.x += 21;
++    // Use a gray color similar to the native separator
++    DeviceColor color = ToDeviceColor(mozilla::gfx::sRGBColor::FromU8(193, 208, 208, 255));
++    CGContextSetRGBFillColor(cgContext, color.r, color.g, color.b, color.a);
++    CGContextFillRect(cgContext, separatorRect);
++    return;
++  }
++
+   ThemeMenuState menuState;
+   if (aParams.disabled) {
+     menuState = kThemeMenuDisabled;
+   } else {
+     menuState = aParams.selected ? kThemeMenuSelected : kThemeMenuActive;
+   }
+ 
+   HIThemeMenuItemDrawInfo midi = {0, kThemeMenuItemPlain, menuState};
+@@ -3524,16 +3538,22 @@ LayoutDeviceIntMargin nsNativeThemeCocoa
+     }
+ 
+     case StyleAppearance::Menulist:
+     case StyleAppearance::MenulistButton:
+     case StyleAppearance::MozMenulistArrowButton:
+       result = DirectionAwareMargin(kAquaDropdownBorder, aFrame);
+       break;
+ 
++   case StyleAppearance::Menuarrow:
++      if (nsCocoaFeatures::OnBigSurOrLater()) {
++        result.SizeTo(0, 0, 0, 28);
++      }
++      break;
++
+     case StyleAppearance::NumberInput:
+     case StyleAppearance::Textfield: {
+       SInt32 frameOutset = 0;
+       ::GetThemeMetric(kThemeMetricEditTextFrameOutset, &frameOutset);
+ 
+       SInt32 textPadding = 0;
+       ::GetThemeMetric(kThemeMetricEditTextWhitespace, &textPadding);
+ 
+@@ -3614,16 +3634,23 @@ bool nsNativeThemeCocoa::GetWidgetPaddin
+   switch (aAppearance) {
+     // Radios and checkboxes return a fixed size in GetMinimumWidgetSize
+     // and have a meaningful baseline, so they can't have
+     // author-specified padding.
+     case StyleAppearance::Checkbox:
+     case StyleAppearance::Radio:
+       aResult->SizeTo(0, 0, 0, 0);
+       return true;
++
++    case StyleAppearance::Menuarrow:
++      if (nsCocoaFeatures::OnBigSurOrLater()) {
++        return true;
++      }
++      break;
++
+     default:
+       break;
+   }
+   return false;
+ }
+ 
+ bool nsNativeThemeCocoa::GetWidgetOverflow(nsDeviceContext* aContext, nsIFrame* aFrame,
+                                            StyleAppearance aAppearance, nsRect* aOverflowRect) {

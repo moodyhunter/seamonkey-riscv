@@ -1,0 +1,27 @@
+--- DrawTargetSkia.cpp
++++ DrawTargetSkia.cpp
+
+@@ -1883,17 +1893,22 @@ void DrawTargetSkia::PushLayerWithBlend(
+     SkMatrix inverseCTM;
+     if (mCanvas->getTotalMatrix().invert(&inverseCTM)) {
+       inverseCTM.mapRect(&bounds);
+     } else {
+       bounds.setEmpty();
+     }
+   }
+ 
+-  sk_sp<SkImage> clipImage = aMask ? GetSkImageForSurface(aMask) : nullptr;
++  // We don't pass a lock object to GetSkImageForSurface here, to force a
++  // copy of the data if this is a copy-on-write snapshot. If we instead held
++  // the lock until the corresponding PopLayer, we'd risk deadlocking if someone
++  // tried to touch the originating DrawTarget while the layer was pushed.
++  sk_sp<SkImage> clipImage =
++      aMask ? GetSkImageForSurface(aMask, nullptr) : nullptr;
+   SkMatrix clipMatrix;
+   GfxMatrixToSkiaMatrix(aMaskTransform, clipMatrix);
+   if (aMask) {
+     clipMatrix.preTranslate(aMask->GetRect().X(), aMask->GetRect().Y());
+   }
+ 
+   SkCanvas::SaveLayerRec saveRec(
+       aBounds.IsEmpty() ? nullptr : &bounds, &paint, nullptr, clipImage.get(),

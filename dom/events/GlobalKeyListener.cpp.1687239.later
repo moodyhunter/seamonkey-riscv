@@ -1,0 +1,183 @@
+--- GlobalKeyListener.cpp
++++ GlobalKeyListener.cpp
+@@ -110,88 +110,64 @@ void GlobalKeyListener::InstallKeyboardE
+   // GlobalKeyListeners need to listen each keyboard events before
+   // web contents.
+   aEventListenerManager->AddEventListenerByType(this, u"keydown"_ns,
+                                                 TrustedEventsAtCapture());
+   aEventListenerManager->AddEventListenerByType(this, u"keyup"_ns,
+                                                 TrustedEventsAtCapture());
+   aEventListenerManager->AddEventListenerByType(this, u"keypress"_ns,
+                                                 TrustedEventsAtCapture());
+-  aEventListenerManager->AddEventListenerByType(this, u"mozkeydownonplugin"_ns,
+-                                                TrustedEventsAtCapture());
+-  aEventListenerManager->AddEventListenerByType(this, u"mozkeyuponplugin"_ns,
+-                                                TrustedEventsAtCapture());
+ 
+   // For reducing the IPC cost, preventing to dispatch reserved keyboard
+   // events into the content process.
+   aEventListenerManager->AddEventListenerByType(
+       this, u"keydown"_ns, TrustedEventsAtSystemGroupCapture());
+   aEventListenerManager->AddEventListenerByType(
+       this, u"keyup"_ns, TrustedEventsAtSystemGroupCapture());
+   aEventListenerManager->AddEventListenerByType(
+       this, u"keypress"_ns, TrustedEventsAtSystemGroupCapture());
+-  aEventListenerManager->AddEventListenerByType(
+-      this, u"mozkeydownonplugin"_ns, TrustedEventsAtSystemGroupCapture());
+-  aEventListenerManager->AddEventListenerByType(
+-      this, u"mozkeyuponplugin"_ns, TrustedEventsAtSystemGroupCapture());
+ 
+   // Handle keyboard events in bubbling phase of the system event group.
+   aEventListenerManager->AddEventListenerByType(
+       this, u"keydown"_ns, TrustedEventsAtSystemGroupBubble());
+   aEventListenerManager->AddEventListenerByType(
+       this, u"keyup"_ns, TrustedEventsAtSystemGroupBubble());
+   aEventListenerManager->AddEventListenerByType(
+       this, u"keypress"_ns, TrustedEventsAtSystemGroupBubble());
+   // mozaccesskeynotfound event is fired when modifiers of keypress event
+   // matches with modifier of content access key but it's not consumed by
+   // remote content.
+   aEventListenerManager->AddEventListenerByType(
+       this, u"mozaccesskeynotfound"_ns, TrustedEventsAtSystemGroupBubble());
+-  aEventListenerManager->AddEventListenerByType(
+-      this, u"mozkeydownonplugin"_ns, TrustedEventsAtSystemGroupBubble());
+-  aEventListenerManager->AddEventListenerByType(
+-      this, u"mozkeyuponplugin"_ns, TrustedEventsAtSystemGroupBubble());
+ }
+ 
+ void GlobalKeyListener::RemoveKeyboardEventListenersFrom(
+     EventListenerManager* aEventListenerManager) {
+   aEventListenerManager->RemoveEventListenerByType(this, u"keydown"_ns,
+                                                    TrustedEventsAtCapture());
+   aEventListenerManager->RemoveEventListenerByType(this, u"keyup"_ns,
+                                                    TrustedEventsAtCapture());
+   aEventListenerManager->RemoveEventListenerByType(this, u"keypress"_ns,
+                                                    TrustedEventsAtCapture());
+-  aEventListenerManager->RemoveEventListenerByType(
+-      this, u"mozkeydownonplugin"_ns, TrustedEventsAtCapture());
+-  aEventListenerManager->RemoveEventListenerByType(this, u"mozkeyuponplugin"_ns,
+-                                                   TrustedEventsAtCapture());
+ 
+   aEventListenerManager->RemoveEventListenerByType(
+       this, u"keydown"_ns, TrustedEventsAtSystemGroupCapture());
+   aEventListenerManager->RemoveEventListenerByType(
+       this, u"keyup"_ns, TrustedEventsAtSystemGroupCapture());
+   aEventListenerManager->RemoveEventListenerByType(
+       this, u"keypress"_ns, TrustedEventsAtSystemGroupCapture());
+-  aEventListenerManager->RemoveEventListenerByType(
+-      this, u"mozkeydownonplugin"_ns, TrustedEventsAtSystemGroupCapture());
+-  aEventListenerManager->RemoveEventListenerByType(
+-      this, u"mozkeyuponplugin"_ns, TrustedEventsAtSystemGroupCapture());
+ 
+   aEventListenerManager->RemoveEventListenerByType(
+       this, u"keydown"_ns, TrustedEventsAtSystemGroupBubble());
+   aEventListenerManager->RemoveEventListenerByType(
+       this, u"keyup"_ns, TrustedEventsAtSystemGroupBubble());
+   aEventListenerManager->RemoveEventListenerByType(
+       this, u"keypress"_ns, TrustedEventsAtSystemGroupBubble());
+   aEventListenerManager->RemoveEventListenerByType(
+       this, u"mozaccesskeynotfound"_ns, TrustedEventsAtSystemGroupBubble());
+-  aEventListenerManager->RemoveEventListenerByType(
+-      this, u"mozkeydownonplugin"_ns, TrustedEventsAtSystemGroupBubble());
+-  aEventListenerManager->RemoveEventListenerByType(
+-      this, u"mozkeyuponplugin"_ns, TrustedEventsAtSystemGroupBubble());
+ }
+ 
+ NS_IMETHODIMP
+ GlobalKeyListener::HandleEvent(dom::Event* aEvent) {
+   RefPtr<dom::KeyboardEvent> keyEvent = aEvent->AsKeyboardEvent();
+   NS_ENSURE_TRUE(keyEvent, NS_ERROR_INVALID_ARG);
+ 
+   if (aEvent->EventPhase() == dom::Event_Binding::CAPTURING_PHASE) {
+@@ -200,38 +176,16 @@ GlobalKeyListener::HandleEvent(dom::Even
+     } else {
+       HandleEventOnCaptureInDefaultEventGroup(keyEvent);
+     }
+     return NS_OK;
+   }
+ 
+   WidgetKeyboardEvent* widgetKeyboardEvent =
+       aEvent->WidgetEventPtr()->AsKeyboardEvent();
+-  if (widgetKeyboardEvent->IsKeyEventOnPlugin()) {
+-    // key events on plugin shouldn't execute shortcut key handlers which are
+-    // not reserved.
+-    if (!widgetKeyboardEvent->IsReservedByChrome()) {
+-      return NS_OK;
+-    }
+-
+-    // If the event is untrusted event or was already consumed, do nothing.
+-    if (!widgetKeyboardEvent->IsTrusted() ||
+-        widgetKeyboardEvent->DefaultPrevented()) {
+-      return NS_OK;
+-    }
+-
+-    // XXX Don't check isReserved here because even if the handler in this
+-    //     instance isn't reserved but another instance reserves the key
+-    //     combination, it will be executed when the event is normal keyboard
+-    //     events...
+-    bool isReserved = false;
+-    if (!HasHandlerForEvent(keyEvent, &isReserved)) {
+-      return NS_OK;
+-    }
+-  }
+ 
+   // If this event was handled by APZ then don't do the default action, and
+   // preventDefault to prevent any other listeners from handling the event.
+   if (widgetKeyboardEvent->mFlags.mHandledByAPZ) {
+     aEvent->PreventDefault();
+     return NS_OK;
+   }
+ 
+@@ -341,27 +295,17 @@ bool GlobalKeyListener::WalkHandlersAndE
+        handler = handler->GetNextHandler()) {
+     bool stopped = aKeyEvent->IsDispatchStopped();
+     if (stopped) {
+       // The event is finished, don't execute any more handlers
+       return false;
+     }
+ 
+     if (aExecute) {
+-      // If the event is eKeyDownOnPlugin, it should execute either keydown
+-      // handler or keypress handler because eKeyDownOnPlugin events are
+-      // never followed by keypress events.
+-      if (widgetKeyboardEvent->mMessage == eKeyDownOnPlugin) {
+-        if (!handler->EventTypeEquals(nsGkAtoms::keydown) &&
+-            !handler->EventTypeEquals(nsGkAtoms::keypress)) {
+-          continue;
+-        }
+-        // The other event types should exactly be matched with the handler's
+-        // event type.
+-      } else if (!handler->EventTypeEquals(eventType)) {
++      if (!handler->EventTypeEquals(eventType)) {
+         continue;
+       }
+     } else {
+       if (handler->EventTypeEquals(nsGkAtoms::keypress)) {
+         // If the handler is a keypress event handler, we also need to check
+         // if coming keydown event is a preceding event of reserved key
+         // combination because if default action of a keydown event is
+         // prevented, following keypress event won't be fired.  However, if
+@@ -413,23 +357,16 @@ bool GlobalKeyListener::WalkHandlersAndE
+       }
+       // Otherwise, we've not found a handler for the event yet.
+       continue;
+     }
+ 
+     // This should only be assigned when aExecute is false.
+     MOZ_ASSERT(!aOutReservedForChrome);
+ 
+-    // If it's not reserved and the event is a key event on a plugin,
+-    // the handler shouldn't be executed.
+-    if (widgetKeyboardEvent->IsKeyEventOnPlugin() &&
+-        !IsReservedKey(widgetKeyboardEvent, handler)) {
+-      return false;
+-    }
+-
+     nsCOMPtr<dom::EventTarget> target = GetHandlerTarget(handler);
+ 
+     // XXX Do we execute only one handler even if the handler neither stops
+     //     propagation nor prevents default of the event?
+     nsresult rv = handler->ExecuteHandler(target, aKeyEvent);
+     if (NS_SUCCEEDED(rv)) {
+       return true;
+     }

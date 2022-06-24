@@ -1,0 +1,21 @@
+--- functions.rst
++++ functions.rst
+@@ -147,17 +147,17 @@ exposing details about the implementatio
+ that is not an instance of ExtensionError is thrown, the original error
+ is logged to the
+ `Browser Console <https://developer.mozilla.org/en-US/docs/Tools/Browser_Console>`_,
+ which can be useful while developing a new API.
+ 
+ Implementing a function in a child process
+ ------------------------------------------
+ Most functions are implemented in the main process, but there are
+-occassionally reasons to implement a function in a child process, such as:
++occasionally reasons to implement a function in a child process, such as:
+ 
+ - The function has one or more parameters of a type that cannot be automatically
+   sent to the main process using the structured clone algorithm.
+ 
+ - The function implementation interacts with some part of the browser
+   internals that is only accessible from a child process.
+ 
+ - The function can be implemented substantially more efficiently in

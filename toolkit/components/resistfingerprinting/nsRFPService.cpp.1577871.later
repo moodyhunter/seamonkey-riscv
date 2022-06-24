@@ -1,0 +1,21 @@
+--- nsRFPService.cpp
++++ nsRFPService.cpp
+@@ -90,17 +89,17 @@ nsRFPService* nsRFPService::GetOrCreate(
+   return sRFPService;
+ }
+ 
+ /* static */
+ double nsRFPService::TimerResolution() {
+   double prefValue = StaticPrefs::
+       privacy_resistFingerprinting_reduceTimerPrecision_microseconds();
+   if (nsRFPService::IsResistFingerprintingEnabled()) {
+-    return max(100000.0, prefValue);
++    return std::max(100000.0, prefValue);
+   }
+   return prefValue;
+ }
+ 
+ /* static */
+ bool nsRFPService::IsResistFingerprintingEnabled() {
+   return StaticPrefs::privacy_resistFingerprinting();
+ }

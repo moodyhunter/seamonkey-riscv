@@ -1,0 +1,14 @@
+--- mochitest-errata.ini
++++ mochitest-errata.ini
+@@ -1167,11 +1167,8 @@ skip-if = (os == 'win')
+ [generated/test_conformance__misc__webgl-specific-stencil-settings.html]
+ skip-if = (os == 'win')
+ [generated/test_conformance__textures__misc__tex-video-using-tex-unit-non-zero.html]
+ # Fails on QuantumRender configs, but passes on standard configs?
+ # Might be intermittant.
+ skip-if = (os == 'win')
+ [generated/test_2_conformance__textures__misc__tex-video-using-tex-unit-non-zero.html]
+ skip-if = (os == 'win')
+-[generated/test_2_conformance2__rendering__instanced-rendering-large-divisor.html]
+-# Assertion failed: static_cast<unsigned int>(packedAttrib.divisor) == divisor, file z:/build/build/src/gfx/angle/checkout/src/libANGLE/renderer/d3d/d3d11/InputLayoutCache.cpp, line 89
+-skip-if = (os == 'win')

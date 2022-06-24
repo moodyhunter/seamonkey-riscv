@@ -1,0 +1,39 @@
+--- nsDisplayList.h
++++ nsDisplayList.h
+@@ -2123,33 +2076,32 @@ MOZ_ALWAYS_INLINE T* MakeClone(nsDisplay
+ #ifdef MOZ_DIAGNOSTIC_ASSERT_ENABLED
+ void AssertUniqueItem(nsDisplayItem* aItem);
+ #endif
+ 
+ /**
+  * Returns true, if a display item of given |aType| needs to be built within
+  * opacity:0 container.
+  */
+-bool ShouldBuildItemForEventsOrPlugins(const DisplayItemType aType);
++bool ShouldBuildItemForEvents(const DisplayItemType aType);
+ 
+ void UpdateDisplayItemData(nsPaintedDisplayItem* aItem);
+ 
+ template <typename T, typename F, typename... Args>
+ MOZ_ALWAYS_INLINE T* MakeDisplayItemWithIndex(nsDisplayListBuilder* aBuilder,
+                                               F* aFrame, const uint16_t aIndex,
+                                               Args&&... aArgs) {
+   static_assert(std::is_base_of<nsDisplayItem, T>::value,
+                 "Display item type should be derived from nsDisplayItem");
+   static_assert(std::is_base_of<nsIFrame, F>::value,
+                 "Frame type should be derived from nsIFrame");
+ 
+   const DisplayItemType type = T::ItemType();
+-  if (aBuilder->InEventsAndPluginsOnly() &&
+-      !ShouldBuildItemForEventsOrPlugins(type)) {
+-    // This item is not needed for events or plugins.
++  if (aBuilder->InEventsOnly() && !ShouldBuildItemForEvents(type)) {
++    // This item is not needed for events.
+     return nullptr;
+   }
+ 
+   T* item = new (aBuilder) T(aBuilder, aFrame, std::forward<Args>(aArgs)...);
+ 
+   if (type != DisplayItemType::TYPE_GENERIC) {
+     item->SetType(type);
+   }

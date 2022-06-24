@@ -1,0 +1,21 @@
+--- InterceptedHttpChannel.cpp
++++ InterceptedHttpChannel.cpp
+@@ -180,17 +180,17 @@ InterceptedHttpChannel::FollowSyntheticR
+   NS_ENSURE_SUCCESS(rv, rv);
+ 
+   nsAutoCString location;
+   rv = mResponseHead->GetHeader(nsHttp::Location, location);
+   NS_ENSURE_SUCCESS(rv, NS_ERROR_FAILURE);
+ 
+   // make sure non-ASCII characters in the location header are escaped.
+   nsAutoCString locationBuf;
+-  if (NS_EscapeURL(location.get(), -1, esc_OnlyNonASCII, locationBuf)) {
++  if (NS_EscapeURL(location.get(), -1, esc_OnlyNonASCII | esc_Spaces, locationBuf)) {
+     location = locationBuf;
+   }
+ 
+   nsCOMPtr<nsIURI> redirectURI;
+   rv = ioService->NewURI(nsDependentCString(location.get()),
+                          nullptr,
+                          mURI,
+                          getter_AddRefs(redirectURI));

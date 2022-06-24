@@ -1,0 +1,20 @@
+--- SandboxPolicyContent.h
++++ SandboxPolicyContent.h
+@@ -110,16 +110,17 @@ static const char SandboxPolicyContent[]
+       (sysctl-name "kern.version")
+       (sysctl-name "kern.tcsm_available")
+       (sysctl-name "kern.tcsm_enable")
+       ; TODO: remove "kern.hostname". Without it the tests hang, but the hostname
+       ; is arguably sensitive information, so we should see what can be done about
+       ; removing it.
+       (sysctl-name "kern.hostname")
+       (sysctl-name "hw.machine")
++      (sysctl-name "hw.memsize")
+       (sysctl-name "hw.model")
+       (sysctl-name "hw.ncpu")
+       (sysctl-name "hw.activecpu")
+       (sysctl-name "hw.byteorder")
+       (sysctl-name "hw.pagesize_compat")
+       (sysctl-name "hw.logicalcpu_max")
+       (sysctl-name "hw.physicalcpu_max")
+       (sysctl-name "hw.busfrequency_compat")

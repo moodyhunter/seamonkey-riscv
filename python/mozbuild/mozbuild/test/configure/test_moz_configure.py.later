@@ -1,0 +1,52 @@
+--- test_moz_configure.py
++++ test_moz_configure.py
+@@ -15,16 +15,18 @@ from common import BaseConfigureTest
+ 
+ 
+ class TargetTest(BaseConfigureTest):
+     def get_target(self, args, env={}):
+         if 'linux' in self.HOST:
+             platform = 'linux2'
+         elif 'mingw' in self.HOST:
+             platform = 'win32'
++        elif 'openbsd6' in self.HOST:
++            platform = 'openbsd6'
+         else:
+             raise Exception('Missing platform for HOST {}'.format(self.HOST))
+         wrapped_sys = {}
+         exec_('from sys import *', wrapped_sys)
+         wrapped_sys['platform'] = platform
+         modules = {
+             'sys': ReadOnlyNamespace(**wrapped_sys),
+         }
+@@ -117,16 +119,30 @@ class TestTargetAndroid(TargetTest):
+         self.assertEqual(
+             self.get_target(['--enable-project=mobile/android', '--target=aarch64']),
+             'aarch64-unknown-linux-android')
+         self.assertEqual(
+             self.get_target(['--enable-project=mobile/android', '--target=arm']),
+             'arm-unknown-linux-androideabi')
+ 
+ 
++class TestTargetOpenBSD(TargetTest):
++    # config.guess returns amd64 on OpenBSD, which we need to pass through to
++    # config.sub so that it canonicalizes to x86_64.
++    HOST = 'amd64-unknown-openbsd6.4'
++
++    def test_target(self):
++        self.assertEqual(self.get_target([]), 'x86_64-unknown-openbsd6.4')
++
++    def config_sub(self, stdin, args):
++        if args[0] == 'amd64-unknown-openbsd6.4':
++            return 0, 'x86_64-unknown-openbsd6.4', ''
++        return super(TestTargetOpenBSD, self).config_sub(stdin, args)
++
++
+ class TestMozConfigure(BaseConfigureTest):
+     def test_nsis_version(self):
+         this = self
+ 
+         class FakeNSIS(object):
+             def __init__(self, version):
+                 self.version = version
+ 

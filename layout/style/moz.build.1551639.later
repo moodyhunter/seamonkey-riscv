@@ -1,0 +1,38 @@
+--- moz.build
++++ moz.build
+@@ -282,33 +282,33 @@ servo_props = GENERATED_FILES['ServoCSSP
+ servo_props.script = 'GenerateServoCSSPropList.py:generate_data'
+ servo_props.inputs = [
+     'ServoCSSPropList.mako.py',
+ ]
+ 
+ if CONFIG['COMPILE_ENVIRONMENT']:
+     GENERATED_FILES += [
+         'CompositorAnimatableProperties.h',
+-        'nsComputedDOMStyleGenerated.cpp',
++        'nsComputedDOMStyleGenerated.inc',
+         'nsCSSPropsGenerated.inc',
+         'ServoStyleConsts.h',
+     ]
+ 
+     EXPORTS.mozilla += [
+         '!CompositorAnimatableProperties.h',
+         '!ServoStyleConsts.h',
+     ]
+ 
+     compositor = GENERATED_FILES['CompositorAnimatableProperties.h']
+     compositor.script = 'GenerateCompositorAnimatableProperties.py:generate'
+     compositor.inputs = [
+         '!ServoCSSPropList.py',
+     ]
+ 
+-    computed = GENERATED_FILES['nsComputedDOMStyleGenerated.cpp']
++    computed = GENERATED_FILES['nsComputedDOMStyleGenerated.inc']
+     computed.script = 'GenerateComputedDOMStyleGenerated.py:generate'
+     computed.inputs = [
+         '!ServoCSSPropList.py',
+     ]
+ 
+     css_props = GENERATED_FILES['nsCSSPropsGenerated.inc']
+     css_props.script = 'GenerateCSSPropsGenerated.py:generate'
+     css_props.inputs = [

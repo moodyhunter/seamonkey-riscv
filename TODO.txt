@@ -1,0 +1,5 @@
+1408481-58a1.patch       /gfx/2d/ScaledFontMac.cpp.                                      Uncomment font_smoothing. Needs later webrender from 2017/10/27.
+1444169-60a1.patch       /accessible/ipc/win/handler/HandlerDataCleanup.h                Dependent on Bug 1418448.
+1472894-1-63a1.patch     /dom/canvas/test/webgl-conf\mochitest-errata.ini
+1551639-1-69a1.patch     /layout/style/moz.build                                         Dependent on Bug 1471114.
+1678413-786.patch        /netwerk/protocol/viewsource/nsViewSourceChannel.cpp add mCallback  in ReleaseListeners(); if backporting Bug 1608224

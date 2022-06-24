@@ -1,0 +1,22 @@
+--- nsReadableUtils.h
++++ nsReadableUtils.h
+@@ -124,18 +124,17 @@ inline void ConvertLatin1toUTF16(mozilla
+                                  mozilla::Span<char16_t> aDest) {
+   encoding_mem_convert_latin1_to_utf16(aSource.Elements(), aSource.Length(),
+                                        aDest.Elements(), aDest.Length());
+ }
+ 
+ /**
+  * Lone surrogates are replaced with the REPLACEMENT CHARACTER.
+  *
+- * The length of aDest must be at least the length of aSource times three
+- * _plus one_.
++ * The length of aDest must be at least the length of aSource times three.
+  *
+  * Returns the number of code units written.
+  */
+ inline size_t ConvertUTF16toUTF8(mozilla::Span<const char16_t> aSource,
+                                  mozilla::Span<char> aDest) {
+   return encoding_mem_convert_utf16_to_utf8(
+       aSource.Elements(), aSource.Length(), aDest.Elements(), aDest.Length());
+ }

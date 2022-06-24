@@ -1,0 +1,22 @@
+--- DecoderFactory.cpp
++++ DecoderFactory.cpp
+@@ -241,17 +241,18 @@ DecoderFactory::CloneAnimationDecoder(De
+ {
+   MOZ_ASSERT(aDecoder);
+ 
+   // In an ideal world, we would assert aDecoder->HasAnimation() but we cannot.
+   // The decoder may not have detected it is animated yet (e.g. it did not even
+   // get scheduled yet, or it has only decoded the first frame and has yet to
+   // rediscover it is animated).
+   DecoderType type = aDecoder->GetType();
+-  MOZ_ASSERT(type == DecoderType::GIF || type == DecoderType::PNG,
++  MOZ_ASSERT(type == DecoderType::GIF || type == DecoderType::PNG ||
++             type == DecoderType::WEBP,
+              "Calling CloneAnimationDecoder for non-animating DecoderType");
+ 
+   RefPtr<Decoder> decoder = GetDecoder(type, nullptr, /* aIsRedecode = */ true);
+   MOZ_ASSERT(decoder, "Should have a decoder now");
+ 
+   // Initialize the decoder.
+   decoder->SetMetadataDecode(false);
+   decoder->SetIterator(aDecoder->GetSourceBuffer()->Iterator());

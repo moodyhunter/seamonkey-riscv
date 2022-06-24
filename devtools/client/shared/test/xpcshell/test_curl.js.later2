@@ -1,0 +1,48 @@
+--- test_curl.js
++++ test_curl.js
+@@ -76,16 +76,20 @@ add_task(async function() {
+     exactHeaderInParams(curlParams, "Referer: https://example.com/home/"),
+     "referer header present in curl output"
+   );
+   ok(
+     exactHeaderInParams(curlParams, "Content-Type: text/plain"),
+     "content-type header present in curl output"
+   );
+   ok(!inParams(curlParams, "--data"), "no data param in GET curl output");
++  ok(
++    !inParams(curlParams, "--data-raw"),
++    "no raw data param in GET curl output"
++  );
+ });
+ 
+ // Test `Curl.generateCommand` URL glob handling
+ add_task(async function() {
+   let request = {
+     url: "https://example.com/",
+     method: "GET",
+     headers: [],
+@@ -135,19 +139,22 @@ add_task(async function() {
+   ok(
+     !headerTypeInParams(curlParams, "Content-Length"),
+     "content-length header ignored - curl generates new one"
+   );
+   ok(
+     exactHeaderInParams(curlParams, "Content-Type: text/plain"),
+     "content-type header present in curl output"
+   );
+-  ok(inParams(curlParams, "--data"), '"--data" param present in curl output');
+   ok(
+-    inParams(curlParams, `--data ${quote(request.postDataText)}`),
++    inParams(curlParams, "--data-raw"),
++    '"--data-raw" param present in curl output'
++  );
++  ok(
++    inParams(curlParams, `--data-raw ${quote(request.postDataText)}`),
+     "proper payload data present in output"
+   );
+ });
+ 
+ // Test `Curl.generateCommand` multipart data POSTing
+ add_task(async function() {
+   const boundary = "----------14808";
+   const request = {

@@ -1,0 +1,47 @@
+--- URIFixup.jsm
++++ URIFixup.jsm
+@@ -35,16 +35,23 @@ XPCOMUtils.defineLazyServiceGetter(
+ 
+ XPCOMUtils.defineLazyServiceGetter(
+   this,
+   "defaultProtocolHandler",
+   "@mozilla.org/network/protocol;1?name=default",
+   "nsIProtocolHandler"
+ );
+ 
++XPCOMUtils.defineLazyServiceGetter(
++  this,
++  "fileProtocolHandler",
++  "@mozilla.org/network/protocol;1?name=file",
++  "nsIFileProtocolHandler"
++);
++
+ XPCOMUtils.defineLazyPreferenceGetter(
+   this,
+   "fixupSchemeTypos",
+   "browser.fixup.typo.scheme",
+   true
+ );
+ XPCOMUtils.defineLazyPreferenceGetter(
+   this,
+@@ -855,17 +862,19 @@ function fileURIFixup(uriString) {
+     attemptFixup = uriString.startsWith("/");
+   }
+   if (attemptFixup) {
+     try {
+       // Test if this is a valid path by trying to create a local file
+       // object. The URL of that is returned if successful.
+       let file = Cc["@mozilla.org/file/local;1"].createInstance(Ci.nsIFile);
+       file.initWithPath(uriString);
+-      return Services.io.newFileURI(file);
++      return Services.io.newURI(
++        fileProtocolHandler.getURLSpecFromActualFile(file)
++      );
+     } catch (ex) {
+       // Not a file uri.
+     }
+   }
+   return null;
+ }
+ 
+ /**

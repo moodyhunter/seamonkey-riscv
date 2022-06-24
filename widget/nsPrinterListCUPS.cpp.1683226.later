@@ -1,0 +1,63 @@
+--- nsPrinterListCUPS.cpp
++++ nsPrinterListCUPS.cpp
+@@ -1,15 +1,16 @@
+ /* This Source Code Form is subject to the terms of the Mozilla Public
+  * License, v. 2.0. If a copy of the MPL was not distributed with this
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ 
+ #include "nsPrinterListCUPS.h"
+ 
+ #include "mozilla/IntegerRange.h"
++#include "mozilla/Maybe.h"
+ #include "nsCUPSShim.h"
+ #include "nsPrinterCUPS.h"
+ #include "nsString.h"
+ #include "prenv.h"
+ 
+ // Use a local static to initialize the CUPS shim lazily, when it's needed.
+ // This is used in order to avoid a global constructor.
+ static nsCUPSShim& CupsShim() {
+@@ -105,19 +106,19 @@ nsTArray<PrinterInfo> nsPrinterListCUPS:
+ }
+ 
+ RefPtr<nsIPrinter> nsPrinterListCUPS::CreatePrinter(PrinterInfo aInfo) const {
+   return mozilla::MakeRefPtr<nsPrinterCUPS>(
+       mCommonPaperInfo, CupsShim(), std::move(aInfo.mName),
+       static_cast<cups_dest_t*>(aInfo.mCupsHandle));
+ }
+ 
+-Maybe<PrinterInfo> nsPrinterListCUPS::PrinterByName(
++mozilla::Maybe<PrinterInfo> nsPrinterListCUPS::PrinterByName(
+     nsString aPrinterName) const {
+-  Maybe<PrinterInfo> rv;
++  mozilla::Maybe<PrinterInfo> rv;
+   if (!CupsShim().InitOkay()) {
+     return rv;
+   }
+ 
+   // Will contain the printer, if found. This must be fully owned, and not a
+   // member of another array of printers.
+   cups_dest_t* printer = nullptr;
+ 
+@@ -155,19 +156,19 @@ Maybe<PrinterInfo> nsPrinterListCUPS::Pr
+   if (printer) {
+     // Since the printer name had to be passed by-value, we can move the
+     // name from that.
+     rv.emplace(PrinterInfo{std::move(aPrinterName), printer});
+   }
+   return rv;
+ }
+ 
+-Maybe<PrinterInfo> nsPrinterListCUPS::PrinterBySystemName(
++mozilla::Maybe<PrinterInfo> nsPrinterListCUPS::PrinterBySystemName(
+     nsString aPrinterName) const {
+-  Maybe<PrinterInfo> rv;
++  mozilla::Maybe<PrinterInfo> rv;
+   if (!CupsShim().InitOkay()) {
+     return rv;
+   }
+ 
+   const auto printerName = NS_ConvertUTF16toUTF8(aPrinterName);
+   if (cups_dest_t* const printer = CupsShim().cupsGetNamedDest(
+           CUPS_HTTP_DEFAULT, printerName.get(), nullptr)) {
+     rv.emplace(PrinterInfo{std::move(aPrinterName), printer});

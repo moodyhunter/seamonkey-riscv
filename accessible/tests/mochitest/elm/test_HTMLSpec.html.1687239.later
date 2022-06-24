@@ -1,0 +1,26 @@
+Needs https://bugzilla.mozilla.org/show_bug.cgi?id=1670800
+
+--- test_HTMLSpec.html
++++ test_HTMLSpec.html
+@@ -1114,20 +1111,17 @@
+       obj = {
+         role: ROLE_LANDMARK,
+         attributes: { "xml-roles": "navigation" },
+         interfaces: [ nsIAccessibleText, nsIAccessibleHyperText ],
+       };
+       testElm("nav", obj);
+ 
+       // ////////////////////////////////////////////////////////////////////////
+-      // HTML:object (windowless/windowed plugins and media) and HTML:param
+-
+-      ok(!isAccessible("object_plugin_windowless"), "(blocked) windowless plugin object element is not accessible");
+-      ok(!isAccessible("object_plugin_windowed"), "(blocked) windowed plugin object element is not accessible");
++      // HTML:object and HTML:param
+ 
+       obj = {
+         role: ROLE_GRAPHIC,
+         interfaces: [ nsIAccessibleImage ],
+       };
+       testElm("object_png", obj);
+ 
+       obj = {

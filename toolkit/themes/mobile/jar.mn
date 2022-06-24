@@ -1,0 +1,17 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+toolkit.jar:
+% skin global classic/1.0 %skin/classic/global/
+# These are the CSS files that must exist
+   skin/classic/global/scrollbars.css                      (global/empty.css)
+
+   skin/classic/global/media/clicktoplay-bgtexture.png     (global/media/clicktoplay-bgtexture.png)
+   skin/classic/global/media/error.png                     (global/media/error.png)
+   skin/classic/global/media/throbber.png                  (global/media/throbber.png)
+   skin/classic/global/media/videoClickToPlayButton.svg    (global/media/videoClickToPlayButton.svg)
+   skin/classic/global/media/TopLevelImageDocument.css     (global/media/TopLevelImageDocument.css)
+   skin/classic/global/media/TopLevelVideoDocument.css     (global/media/TopLevelVideoDocument.css)
+   skin/classic/global/media/imagedoc-lightnoise.png       (global/media/imagedoc-lightnoise.png)
+   skin/classic/global/media/imagedoc-darknoise.png        (global/media/imagedoc-darknoise.png)

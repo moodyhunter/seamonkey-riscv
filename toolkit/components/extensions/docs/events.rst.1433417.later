@@ -1,0 +1,21 @@
+--- events.rst
++++ events.rst
+@@ -29,17 +29,17 @@ The definition for a simple event looks 
+    ]
+ 
+ This fragment defines an event that is used from an extension with
+ code such as:
+ 
+ .. code-block:: js
+ 
+    browser.myapi.onSomething.addListener(param1 => {
+-     console.log(`Something happend: ${param1}`);
++     console.log(`Something happened: ${param1}`);
+    });
+ 
+ Note that the schema syntax looks similar to that for a function,
+ but for an event, the ``parameters`` property specifies the arguments
+ that will be passed to a listener.
+ 
+ Implementing an event
+ ---------------------

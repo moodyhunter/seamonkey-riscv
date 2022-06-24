@@ -1,0 +1,20 @@
+--- generated-mochitest.ini
++++ generated-mochitest.ini
+@@ -5335,17 +5335,16 @@ subsuite = webgl2-core
+ fail-if = (os == 'mac') || (os == 'win')
+ [generated/test_2_conformance2__rendering__instanced-arrays.html]
+ subsuite = webgl2-core
+ fail-if = 1
+ [generated/test_2_conformance2__rendering__instanced-rendering-bug.html]
+ subsuite = webgl2-core
+ [generated/test_2_conformance2__rendering__instanced-rendering-large-divisor.html]
+ subsuite = webgl2-core
+-skip-if = (os == 'win')
+ [generated/test_2_conformance2__rendering__line-rendering-quality.html]
+ subsuite = webgl2-core
+ [generated/test_2_conformance2__rendering__multisampling-fragment-evaluation.html]
+ subsuite = webgl2-core
+ [generated/test_2_conformance2__rendering__out-of-bounds-index-buffers-after-copying.html]
+ subsuite = webgl2-core
+ [generated/test_2_conformance2__rendering__read-draw-when-missing-image.html]
+ subsuite = webgl2-core

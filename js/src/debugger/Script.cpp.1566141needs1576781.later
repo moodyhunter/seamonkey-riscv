@@ -1,0 +1,20 @@
+--- Script.cpp
++++ Script.cpp
+@@ -1505,16 +1505,17 @@ static bool BytecodeIsEffectful(JSOp op)
+     case JSOP_LABEL:
+     case JSOP_UNDEFINED:
+     case JSOP_IFNE:
+     case JSOP_IFEQ:
+     case JSOP_RETURN:
+     case JSOP_RETRVAL:
+     case JSOP_AND:
+     case JSOP_OR:
++    case JSOP_COALESCE:
+     case JSOP_TRY:
+     case JSOP_THROW:
+     case JSOP_GOTO:
+     case JSOP_CONDSWITCH:
+     case JSOP_TABLESWITCH:
+     case JSOP_CASE:
+     case JSOP_DEFAULT:
+     case JSOP_BITNOT:

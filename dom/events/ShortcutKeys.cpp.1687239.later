@@ -1,0 +1,25 @@
+--- ShortcutKeys.cpp
++++ ShortcutKeys.cpp
+@@ -46,20 +46,20 @@ KeyEventHandler* ShortcutKeys::GetHandle
+   }
+ 
+   return sInstance->EnsureHandlers(aType);
+ }
+ 
+ /* static */
+ nsAtom* ShortcutKeys::ConvertEventToDOMEventType(
+     const WidgetKeyboardEvent* aWidgetKeyboardEvent) {
+-  if (aWidgetKeyboardEvent->IsKeyDownOrKeyDownOnPlugin()) {
++  if (aWidgetKeyboardEvent->mMessage == eKeyDown) {
+     return nsGkAtoms::keydown;
+   }
+-  if (aWidgetKeyboardEvent->IsKeyUpOrKeyUpOnPlugin()) {
++  if (aWidgetKeyboardEvent->mMessage == eKeyUp) {
+     return nsGkAtoms::keyup;
+   }
+   // eAccessKeyNotFound event is always created from eKeyPress event and
+   // the original eKeyPress event has stopped its propagation before dispatched
+   // into the DOM tree in this process and not matched with remote content's
+   // access keys.  So, we should treat it as an eKeyPress event and execute
+   // a command if it's registered as a shortcut key.
+   if (aWidgetKeyboardEvent->mMessage == eKeyPress ||

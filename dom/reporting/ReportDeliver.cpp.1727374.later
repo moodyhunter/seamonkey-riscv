@@ -1,0 +1,24 @@
+--- ReportDeliver.cpp
++++ ReportDeliver.cpp
+@@ -216,18 +216,19 @@ void SendReports(nsTArray<ReportDeliver:
+   internalRequest->SetCredentialsMode(RequestCredentials::Include);
+ 
+   RefPtr<Request> request =
+       new Request(globalObject, std::move(internalRequest), nullptr);
+ 
+   RequestOrUSVString fetchInput;
+   fetchInput.SetAsRequest() = request;
+ 
+-  RefPtr<Promise> promise = FetchRequest(
+-      globalObject, fetchInput, RequestInit(), CallerType::NonSystem, error);
++  RootedDictionary<RequestInit> requestInit(RootingCx());
++  RefPtr<Promise> promise = FetchRequest(globalObject, fetchInput, requestInit,
++                                         CallerType::NonSystem, error);
+   if (error.Failed()) {
+     for (auto& report : aReports) {
+       ++report.mFailures;
+       if (gReportDeliver) {
+         gReportDeliver->AppendReportData(report);
+       }
+     }
+     return;

@@ -1,0 +1,5 @@
+--- input-scrollable-region-001.html.ini
++++ input-scrollable-region-001.html.ini
+@@ -1,2 +0,0 @@
+-[input-scrollable-region-001.html]
+-  expected: FAIL

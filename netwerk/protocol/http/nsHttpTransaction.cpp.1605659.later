@@ -1,0 +1,21 @@
+--- nsHttpTransaction.cpp
++++ nsHttpTransaction.cpp
+@@ -2456,17 +2456,17 @@ void nsHttpTransaction::SetHttpTrailers(
+     int32_t newline = aTrailers.FindCharInSet("\n", cur);
+     if (newline == -1) {
+       newline = len;
+     }
+ 
+     int32_t end =
+         (newline && aTrailers[newline - 1] == '\r') ? newline - 1 : newline;
+     nsDependentCSubstring line(aTrailers, cur, end);
+-    nsHttpAtom hdr = {nullptr};
++    nsHttpAtom hdr;
+     nsAutoCString hdrNameOriginal;
+     nsAutoCString val;
+     if (NS_SUCCEEDED(httpTrailers->ParseHeaderLine(line, &hdr, &hdrNameOriginal,
+                                                    &val))) {
+       if (hdr == nsHttp::Server_Timing) {
+         Unused << httpTrailers->SetHeaderFromNet(hdr, hdrNameOriginal, val,
+                                                  true);
+       }

@@ -1,0 +1,22 @@
+--- TextEncoder.cpp
++++ TextEncoder.cpp
+@@ -19,18 +19,17 @@ void TextEncoder::Encode(JSContext* aCx,
+                          JS::MutableHandle<JSObject*> aRetval,
+                          ErrorResult& aRv) {
+   // Given nsTSubstring<char16_t>::kMaxCapacity, it should be
+   // impossible for the length computation to overflow, but
+   // let's use checked math in case someone changes something
+   // in the future.
+   // Uint8Array::Create takes uint32_t as the length.
+   CheckedInt<uint32_t> bufLen(aString.Length());
+-  bufLen *= 3;
+-  bufLen += 1;  // plus one is part of the contract for ConvertUTF16toUTF8
++  bufLen *= 3;  // from the contract for ConvertUTF16toUTF8
+   if (!bufLen.isValid()) {
+     aRv.Throw(NS_ERROR_OUT_OF_MEMORY);
+     return;
+   }
+ 
+   auto data = mozilla::MakeUniqueFallible<uint8_t[]>(bufLen.value());
+   if (!data) {
+     aRv.Throw(NS_ERROR_OUT_OF_MEMORY);

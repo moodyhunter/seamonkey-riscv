@@ -1,0 +1,21 @@
+--- test_storage_connection.js
++++ test_storage_connection.js
+@@ -1007,17 +1007,17 @@ add_task(async function test_defaultTran
+   }
+   await asyncClose(clone);
+   await asyncClose(db);
+ });
+ 
+ add_task(async function test_variableLimit() {
+   info("Open connection");
+   let db = Services.storage.openDatabase(getTestDB());
+-  Assert.equal(db.variableLimit, 999, "Should return default limit");
++  Assert.equal(db.variableLimit, 32766, "Should return default limit");
+   await asyncClose(db);
+ });
+ 
+ add_task(async function test_getInterface() {
+   let db = getOpenedDatabase();
+   let target = db
+     .QueryInterface(Ci.nsIInterfaceRequestor)
+     .getInterface(Ci.nsIEventTarget);

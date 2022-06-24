@@ -1,0 +1,24 @@
+diff --git a/netwerk/protocol/http/InterceptedHttpChannel.cpp b/netwerk/protocol/http/InterceptedHttpChannel.cpp
+--- a/netwerk/protocol/http/InterceptedHttpChannel.cpp
++++ b/netwerk/protocol/http/InterceptedHttpChannel.cpp
+@@ -582,10 +582,20 @@ InterceptedChannelContent::GetSecureUpgr
+   }
+   if (uri) {
+     uri.forget(aURI);
+     return NS_OK;
+   }
+   return NS_ERROR_FAILURE;
+ }
+ 
++NS_IMETHODIMP
++InterceptedHttpChannel::GetDeliveryTarget(nsIEventTarget** aEventTarget)
++{
++  if (!mPump) {
++    return NS_ERROR_NOT_AVAILABLE;
++  }
++  return mPump->GetDeliveryTarget(aEventTarget);
++}
++
++
+ } // namespace net
+ } // namespace mozilla

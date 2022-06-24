@@ -1,0 +1,24 @@
+--- index.js
++++ index.js
+@@ -69,21 +69,16 @@ const Types = exports.__TypesForTests = 
+     front: "devtools/shared/fronts/emulation",
+   },
+   /* environment has old fashion client and no front */
+   {
+     types: ["environment"],
+     spec: "devtools/shared/specs/environment",
+     front: null,
+   },
+-  {
+-    types: ["eventLoopLag"],
+-    spec: "devtools/shared/specs/eventlooplag",
+-    front: "devtools/shared/fronts/eventlooplag",
+-  },
+   /* frame has old fashion client and no front */
+   {
+     types: ["frame"],
+     spec: "devtools/shared/specs/frame",
+     front: null,
+   },
+   {
+     types: ["framerate"],

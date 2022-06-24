@@ -1,0 +1,25 @@
+--- test_redirect.html
++++ test_redirect.html
+@@ -31,20 +31,15 @@ function receiveMessage(event) {
+   if (testcounter < 2) {
+     return;
+   }
+   window.removeEventListener("message", receiveMessage);
+   SimpleTest.finish();
+ }
+ 
+ function startTest() {
+-  SpecialPowers.pushPrefEnv({
+-  	'set': [["security.mixed_content.use_hsts", false],
+-            ["security.mixed_content.send_hsts_priming", false]]
+-  }, function () {
+-    let testframe = document.getElementById("testframe");
+-    testframe.src = PATH + "file_redirect.html";
+-  });
++  let testframe = document.getElementById("testframe");
++  testframe.src = PATH + "file_redirect.html";
+ }
+ 
+ </script>
+ </body>
+ </html>

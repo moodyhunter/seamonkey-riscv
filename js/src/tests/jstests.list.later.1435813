@@ -1,0 +1,24 @@
+--- jstests.list
++++ jstests.list
+@@ -41,21 +41,16 @@ skip-if(!this.hasOwnProperty("Intl")) in
+ # Skip built-ins/Simd tests when SIMD isn't available.
+ skip-if(!this.hasOwnProperty("SIMD")) include test262/built-ins/Simd/jstests.list
+ 
+ # https://bugzilla.mozilla.org/show_bug.cgi?id=1415303
+ skip-if(!this.hasOwnProperty("SharedArrayBuffer")) script non262/SIMD/load-sab-buffer-compat.js
+ skip-if(!this.hasOwnProperty("Atomics")) include test262/built-ins/Atomics/jstests.list
+ skip-if(!this.hasOwnProperty("SharedArrayBuffer")) include test262/built-ins/SharedArrayBuffer/jstests.list
+ 
+-# flatMap and flatten are Nightly-only
+-skip-if(!Array.prototype.flatMap) include test262/built-ins/Array/prototype/flatMap/jstests.list
+-skip-if(!Array.prototype.flat) include test262/built-ins/Array/prototype/flat/jstests.list
+-
+-
+ #####################################
+ # Test262 tests disabled on browser #
+ #####################################
+ 
+ # Defines a non-configurable property on the WindowProxy object.
+ skip-if(!xulRuntime.shell) script test262/annexB/language/eval-code/direct/global-block-decl-eval-global-existing-global-update.js
+ skip-if(!xulRuntime.shell) script test262/annexB/language/eval-code/direct/global-if-decl-else-decl-a-eval-global-existing-global-update.js
+ skip-if(!xulRuntime.shell) script test262/annexB/language/eval-code/direct/global-if-decl-else-decl-b-eval-global-existing-global-update.js

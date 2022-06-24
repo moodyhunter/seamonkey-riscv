@@ -1,0 +1,13 @@
+[package]
+name = "rust_url_capi"
+version = "0.0.1"
+authors = ["Valentin Gosu <valentin.gosu@gmail.com>"]
+
+[lib]
+name = "rust_url_capi"
+
+[dependencies]
+libc = "0.2.24"
+url = "1.7.2"
+nsstring = { path = "../../../servo/support/gecko/nsstring" }
+nserror = { path = "../../../xpcom/rust/nserror" }

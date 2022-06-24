@@ -1,0 +1,20 @@
+--- solus.py
++++ solus.py
+@@ -27,17 +27,16 @@ class SolusBootstrapper(LinuxBootstrappe
+     ]
+     SYSTEM_COMPONENTS = [
+         "system.devel",
+     ]
+ 
+     BROWSER_PACKAGES = [
+         "alsa-lib",
+         "dbus",
+-        "libgtk-2",
+         "libgtk-3",
+         "libevent",
+         "libvpx",
+         "libxt",
+         "nasm",
+         "libstartup-notification",
+         "gst-plugins-base",
+         "gst-plugins-good",

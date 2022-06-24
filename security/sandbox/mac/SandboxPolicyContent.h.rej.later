@@ -1,0 +1,147 @@
+--- SandboxPolicyContent.h
++++ SandboxPolicyContent.h
+@@ -12,17 +12,17 @@ namespace mozilla {
+ 
+ static const char SandboxPolicyContent[] = R"SANDBOX_LITERAL(
+   (version 1)
+ 
+   (define should-log (param "SHOULD_LOG"))
+   (define sandbox-level-1 (param "SANDBOX_LEVEL_1"))
+   (define sandbox-level-2 (param "SANDBOX_LEVEL_2"))
+   (define sandbox-level-3 (param "SANDBOX_LEVEL_3"))
+-  (define macosMinorVersion (string->number (param "MAC_OS_MINOR")))
++  (define macosVersion (string->number (param "MAC_OS_VERSION")))
+   (define appPath (param "APP_PATH"))
+   (define hasProfileDir (param "HAS_SANDBOXED_PROFILE"))
+   (define profileDir (param "PROFILE_DIR"))
+   (define hasWindowServer (param "HAS_WINDOW_SERVER"))
+   (define home-path (param "HOME_PATH"))
+   (define debugWriteDir (param "DEBUG_WRITE_DIR"))
+   (define testingReadPath1 (param "TESTING_READ_PATH1"))
+   (define testingReadPath2 (param "TESTING_READ_PATH2"))
+@@ -95,17 +95,17 @@ static const char SandboxPolicyContent[]
+     file-ioctl
+     (literal "/dev/dtracehelper"))
+ 
+   ; Needed for things like getpriority()/setpriority()
+   (allow process-info-pidinfo process-info-setcontrol (target self))
+ 
+   ; macOS 10.9 does not support the |sysctl-name| predicate, so unfortunately
+   ; we need to allow all sysctl-reads there.
+-  (if (= macosMinorVersion 9)
++  (if (= macosVersion 1009)
+     (allow sysctl-read)
+     (allow sysctl-read
+       (sysctl-name-regex #"^sysctl\.")
+       (sysctl-name "kern.ostype")
+       (sysctl-name "kern.osversion")
+       (sysctl-name "kern.osrelease")
+       (sysctl-name "kern.version")
+       (sysctl-name "kern.tcsm_available")
+@@ -140,17 +140,17 @@ static const char SandboxPolicyContent[]
+       (sysctl-name "hw.optional.avx1_0")
+       (sysctl-name "hw.optional.avx2_0")
+       (sysctl-name "machdep.cpu.vendor")
+       (sysctl-name "machdep.cpu.family")
+       (sysctl-name "machdep.cpu.model")
+       (sysctl-name "machdep.cpu.stepping")
+       (sysctl-name "debug.intel.gstLevelGST")
+       (sysctl-name "debug.intel.gstLoaderControl")))
+-  (if (> macosMinorVersion 9)
++  (if (> macosVersion 1009)
+     (allow sysctl-write
+       (sysctl-name "kern.tcsm_enable")))
+ 
+   (define (home-regex home-relative-regex)
+     (regex (string-append "^" (regex-quote home-path) home-relative-regex)))
+   (define (home-subpath home-relative-subpath)
+     (subpath (string-append home-path home-relative-subpath)))
+   (define (home-literal home-relative-literal)
+@@ -172,24 +172,24 @@ static const char SandboxPolicyContent[]
+   (if (string=? hasWindowServer "TRUE")
+     (allow mach-lookup (global-name "com.apple.windowserver.active")))
+   (allow mach-lookup
+     (global-name "com.apple.system.opendirectoryd.libinfo")
+     (global-name "com.apple.CoreServices.coreservicesd")
+     (global-name "com.apple.coreservices.launchservicesd")
+     (global-name "com.apple.lsd.mapdb"))
+ 
+-  (if (>= macosMinorVersion 13)
++  (if (>= macosVersion 1013)
+     (allow mach-lookup
+       ; bug 1392988
+       (xpc-service-name "com.apple.coremedia.videodecoder")
+       (xpc-service-name "com.apple.coremedia.videoencoder")))
+ 
+ ; bug 1312273
+-  (if (= macosMinorVersion 9)
++  (if (= macosVersion 1009)
+      (allow mach-lookup (global-name "com.apple.xpcd")))
+ 
+   (allow iokit-open
+      (iokit-user-client-class "IOHIDParamUserClient"))
+ 
+   ; Only supported on macOS 10.10+
+   (if (defined? 'iokit-get-properties)
+     (allow iokit-get-properties
+@@ -312,17 +312,17 @@ static const char SandboxPolicyContent[]
+       (profile-subpath "/extensions")
+       (profile-subpath "/chrome")))
+ 
+ ; accelerated graphics
+   (allow user-preference-read (preference-domain "com.apple.opengl"))
+   (allow user-preference-read (preference-domain "com.nvidia.OpenGL"))
+   (allow mach-lookup
+       (global-name "com.apple.cvmsServ"))
+-  (if (>= macosMinorVersion 14)
++  (if (>= macosVersion 1014)
+     (allow mach-lookup
+       (global-name "com.apple.MTLCompilerService")))
+   (allow iokit-open
+       (iokit-connection "IOAccelerator")
+       (iokit-user-client-class "IOAccelerationUserClient")
+       (iokit-user-client-class "IOSurfaceRootUserClient")
+       (iokit-user-client-class "IOSurfaceSendRight")
+       (iokit-user-client-class "IOFramebufferSharedUserClient")
+@@ -346,38 +346,38 @@ static const char SandboxPolicyContent[]
+     ; API calls.
+     (extension "com.apple.app-sandbox.read"))
+   ; Fonts may continue to work without explicitly allowing these
+   ; services because, at present, connections are made to the services
+   ; before the sandbox is enabled as a side-effect of some API calls.
+   (allow mach-lookup
+     (global-name "com.apple.fonts")
+     (global-name "com.apple.FontObjectsServer"))
+-  (if (<= macosMinorVersion 11)
++  (if (<= macosVersion 1011)
+     (allow mach-lookup (global-name "com.apple.FontServer")))
+ 
+   ; Fonts
+   ; Workaround for sandbox extensions not being automatically
+   ; issued for fonts on 10.11 and earlier versions (bug 1460917).
+-  (if (<= macosMinorVersion 11)
++  (if (<= macosVersion 1011)
+     (allow file-read*
+       (regex #"\.[oO][tT][fF]$"          ; otf
+              #"\.[tT][tT][fF]$"          ; ttf
+              #"\.[tT][tT][cC]$"          ; ttc
+              #"\.[oO][tT][cC]$"          ; otc
+              #"\.[dD][fF][oO][nN][tT]$") ; dfont
+       (home-subpath "/Library/FontCollections")
+       (home-subpath "/Library/Application Support/Adobe/CoreSync/plugins/livetype")
+       (home-subpath "/Library/Application Support/FontAgent")
+       (home-subpath "/Library/Extensis/UTC") ; bug 1469657
+       (subpath "/Library/Extensis/UTC")      ; bug 1469657
+       (regex #"\.fontvault/")
+       (home-subpath "/FontExplorer X/Font Library")))
+ 
+-  (if (>= macosMinorVersion 13)
++  (if (>= macosVersion 1013)
+    (allow mach-lookup
+     ; bug 1565575
+     (global-name "com.apple.audio.AudioComponentRegistrar")))
+ )SANDBOX_LITERAL";
+ 
+ // These are additional rules that are added to the content process rules for
+ // file content processes.
+ static const char SandboxPolicyContentFileAddend[] = R"SANDBOX_LITERAL(

@@ -1,0 +1,20 @@
+--- gentoo.py
++++ gentoo.py
+@@ -46,17 +46,16 @@ class GentooBootstrapper(LinuxBootstrapp
+             [
+                 "emerge",
+                 "--oneshot",
+                 "--noreplace",
+                 "--quiet",
+                 "--newuse",
+                 "dev-libs/dbus-glib",
+                 "media-sound/pulseaudio",
+-                "x11-libs/gtk+:2",
+                 "x11-libs/gtk+:3",
+                 "x11-libs/libXt",
+             ]
+         )
+ 
+     def ensure_mobile_android_packages(self, mozconfig_builder, artifact_mode=False):
+         self.run_as_root(["emerge", "--noreplace", "--quiet", "dev-java/openjdk-bin"])
+ 

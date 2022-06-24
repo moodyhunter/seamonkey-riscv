@@ -1,0 +1,20 @@
+--- opensuse.py
++++ opensuse.py
+@@ -26,17 +26,16 @@ class OpenSUSEBootstrapper(LinuxBootstra
+         "gtk3-devel",
+         "dbus-1-glib-devel",
+         "gconf2-devel",
+         "glibc-devel-static",
+         "libstdc++-devel",
+         "libXt-devel",
+         "libproxy-devel",
+         "libuuid-devel",
+-        "gtk2-devel",
+         "clang-devel",
+         "patterns-gnome-devel_gnome",
+     ]
+ 
+     BROWSER_GROUP_PACKAGES = [
+         "devel_C_C++",
+         "devel_gnome",
+     ]

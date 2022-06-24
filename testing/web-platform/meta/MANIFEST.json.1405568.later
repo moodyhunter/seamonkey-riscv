@@ -1,0 +1,64 @@
+--- MANIFEST.json
++++ MANIFEST.json
+@@ -578705,17 +578711,17 @@
+    "ad44e3f4ba132bfb4a522b14a4ff5356dbbbad14",
+    "testharness"
+   ],
+   "cssom-view/offsetParent_element_test.html": [
+    "b2261ec702116c211ab5ac6fbb53698dfe60a7be",
+    "testharness"
+   ],
+   "cssom-view/offsetTopLeftInScrollableParent.html": [
+-   "79b4a278f0e35646cfdffeebf8f0523e2772bc9b",
++   "82a6920db4d0be087e6ed621313ecf92e3e2ed68",
+    "testharness"
+   ],
+   "cssom-view/resources/elementsFromPoint.js": [
+    "0c31158817d4d6f9e59df0d2ebe0e41c6ce41bb5",
+    "support"
+   ],
+   "cssom-view/resources/iframe1.html": [
+    "ec93f617bdc7b0055d96c7b00ab7832cca1c1af0",
+@@ -631253,21 +631263,21 @@
+    "c9dcf7c17010e5495007e000b33aeb4dc89f92b7",
+    "testharness"
+   ],
+   "web-animations/interfaces/KeyframeEffect/iterationComposite.html": [
+    "2ed50cdb27335345015d8b13c64ef86c67048757",
+    "testharness"
+   ],
+   "web-animations/interfaces/KeyframeEffect/processing-a-keyframes-argument-001.html": [
+-   "bc2ddd24f482292a2175ddd94c62293a962cf4af",
++   "83e58d986208b6cbc51e4124a2b17269a26e0520",
+    "testharness"
+   ],
+   "web-animations/interfaces/KeyframeEffect/processing-a-keyframes-argument-002.html": [
+-   "120984a06a0d22ca9d008e144a4f8e9f29a9721b",
++   "38b350320a08cc2a9ae4449944eea427bfbe6f9d",
+    "testharness"
+   ],
+   "web-animations/interfaces/KeyframeEffect/setKeyframes.html": [
+    "2982bb6f57bb52c6e4e0483e4e47b22868a6010d",
+    "testharness"
+   ],
+   "web-animations/interfaces/KeyframeEffect/setTarget.html": [
+    "8c75e6605a134c96e261e5383414b7e15b32d121",
+@@ -631949,17 +631959,17 @@
+    "5a31a3917a5157516c10951a3b3d5ffb43b992d9",
+    "support"
+   ],
+   "webdriver/tests/support/asserts.py": [
+    "b02f45e99cdee49f12608e60333e566c8c0e04d0",
+    "support"
+   ],
+   "webdriver/tests/support/fixtures.py": [
+-   "ed33ffdd2084ba3c65d82ff7ce7996d45ba98ce5",
++   "4b68fd0f02cc88e9abb422c2c3978812edbbbec7",
+    "support"
+   ],
+   "webdriver/tests/support/http_request.py": [
+    "cb40c781fea2280b98135522def5e6a116d7b946",
+    "support"
+   ],
+   "webdriver/tests/support/inline.py": [
+    "d05c1b209ab1b8c22ab542d0418340896bc844fb",

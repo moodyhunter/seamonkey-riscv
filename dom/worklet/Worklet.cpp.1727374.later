@@ -1,0 +1,21 @@
+--- Worklet.cpp
++++ Worklet.cpp
+@@ -121,17 +121,17 @@ class WorkletFetchHandler final : public
+         handler->AddPromise(promise);
+         return promise.forget();
+       }
+     }
+ 
+     RequestOrUSVString requestInput;
+     requestInput.SetAsUSVString().ShareOrDependUpon(aModuleURL);
+ 
+-    RequestInit requestInit;
++    RootedDictionary<RequestInit> requestInit(aCx);
+     requestInit.mCredentials.Construct(aOptions.mCredentials);
+ 
+     SafeRefPtr<Request> request =
+         Request::Constructor(global, aCx, requestInput, requestInit, aRv);
+     if (aRv.Failed()) {
+       return nullptr;
+     }
+ 

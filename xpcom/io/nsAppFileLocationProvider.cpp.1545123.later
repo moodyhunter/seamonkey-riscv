@@ -1,0 +1,27 @@
+Don't think we want to put this in yet.
+
+--- nsAppFileLocationProvider.cpp
++++ nsAppFileLocationProvider.cpp
+@@ -365,21 +365,17 @@ class nsAppDirectoryEnumerator : public 
+   const nsID& DefaultInterface() override { return NS_GET_IID(nsIFile); }
+ 
+   NS_IMETHOD HasMoreElements(bool* aResult) override {
+     while (!mNext && *mCurrentKey) {
+       bool dontCare;
+       nsCOMPtr<nsIFile> testFile;
+       (void)mProvider->GetFile(*mCurrentKey++, &dontCare,
+                                getter_AddRefs(testFile));
+-      // Don't return a file which does not exist.
+-      bool exists;
+-      if (testFile && NS_SUCCEEDED(testFile->Exists(&exists)) && exists) {
+-        mNext = testFile;
+-      }
++      mNext = testFile;
+     }
+     *aResult = mNext != nullptr;
+     return NS_OK;
+   }
+ 
+   NS_IMETHOD GetNext(nsISupports** aResult) override {
+     if (NS_WARN_IF(!aResult)) {
+       return NS_ERROR_INVALID_ARG;

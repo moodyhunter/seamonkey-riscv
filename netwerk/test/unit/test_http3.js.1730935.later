@@ -1,0 +1,34 @@
+--- test_http3.js
++++ test_http3.js
+@@ -71,16 +71,17 @@ function run_test() {
+   do_get_profile();
+   prefs = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
+ 
+   prefs.setBoolPref("network.http.http3.enabled", true);
+   prefs.setCharPref("network.dns.localDomains", "foo.example.com");
+   // We always resolve elements of localDomains as it's hardcoded without the
+   // following pref:
+   prefs.setBoolPref("network.proxy.allow_hijacking_localhost", true);
++  prefs.setBoolPref("network.http.altsvc.oe", true);
+ 
+   // The certificate for the http3server server is for foo.example.com and
+   // is signed by http2-ca.pem so add that cert to the trust list as a
+   // signing cert.
+   let certdb = Cc["@mozilla.org/security/x509certdb;1"].getService(
+     Ci.nsIX509CertDB
+   );
+   addCertFromFile(certdb, "http2-ca.pem", "CTu,u,u");
+@@ -559,12 +560,13 @@ function test_version_fallback() {
+   chan.asyncOpen(listener);
+   do_test_pending();
+ }
+ 
+ function testsDone() {
+   prefs.clearUserPref("network.http.http3.enabled");
+   prefs.clearUserPref("network.dns.localDomains");
+   prefs.clearUserPref("network.proxy.allow_hijacking_localhost");
++  prefs.clearUserPref("network.http.altsvc.oe");
+   dump("testDone\n");
+   do_test_pending();
+   h1Server.stop(do_test_finished);
+ }
