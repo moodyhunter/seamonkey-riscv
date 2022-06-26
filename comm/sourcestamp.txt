@@ -1,0 +1,3 @@
+20201117192745
+https://gitlab.com/seamonkey-project/seamonkey-2.53-mozilla/tree/2_53_5_1_final
+https://gitlab.com/seamonkey-project/seamonkey-2.53-comm/tree/2_53_5_1_final
